@@ -8,19 +8,28 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+    
+    @EnvironmentObject private var coffeeModel: CoffeeModel
+    
+    private func populateOrders() async {
+        do {
+            try await coffeeModel.populateOrders()
+        } catch {
+            print(error)
         }
-        .padding()
+    }
+    
+    var body: some View {
+        List(coffeeModel.orders) { order in
+            OrderCellView(order: order)
+        }.task {
+            await populateOrders()
+        }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView().environmentObject(CoffeeModel(webservice: Webservice()))
     }
 }
