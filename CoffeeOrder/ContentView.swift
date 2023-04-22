@@ -20,16 +20,21 @@ struct ContentView: View {
     }
     
     var body: some View {
-        List(coffeeModel.orders) { order in
-            OrderCellView(order: order)
-        }.task {
-            await populateOrders()
+        if coffeeModel.orders.isEmpty {
+            Text("No orders available!").accessibilityIdentifier("noOrdersText")
+        } else {
+            List(coffeeModel.orders) { order in
+                OrderCellView(order: order)
+            }.task {
+                await populateOrders()
+            }
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environmentObject(CoffeeModel(webservice: Webservice()))
+        var config = Configuration()
+        ContentView().environmentObject(CoffeeModel(webservice: Webservice(baseURL: config.environment.baseURL)))
     }
 }
