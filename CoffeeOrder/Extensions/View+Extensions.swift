@@ -16,4 +16,13 @@ extension View {
             Spacer()
         }
     }
+    
+    @ViewBuilder
+    func visible(_ value: Bool) -> some View {
+        if value {
+            self
+        } else {
+            EmptyView()
+        }
+    }
 }
