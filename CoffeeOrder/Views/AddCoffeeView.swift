@@ -21,6 +21,9 @@ struct AddCoffeeView: View {
     @State private var coffeeSize: CoffeeSize = .small
     @State private var errors = AddCoffeeErrors()
     
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var coffeeModel: CoffeeModel
+    
     var isValid: Bool {
         errors = AddCoffeeErrors()
         
@@ -43,42 +46,68 @@ struct AddCoffeeView: View {
         return errors.name.isEmpty && errors.coffeeName.isEmpty && errors.price.isEmpty
     }
     
-    var body: some View {
-        Form {
-            TextField("Name", text: $name).accessibilityIdentifier("name")
-            
-            Text(errors.name).visible(errors.name.isNotEmpty)
-                .font(.caption)
-                .foregroundColor(.red)
-            
-            TextField("Coffee Name", text: $coffeeName).accessibilityIdentifier("coffeeName")
-            
-            Text(errors.coffeeName).visible(errors.coffeeName.isNotEmpty)
-                .font(.caption)
-                .foregroundColor(.red)
-            
-            TextField("Price", text: $price).accessibilityIdentifier("price")
-            
-            Text(errors.price).visible(errors.price.isNotEmpty)
-                .font(.caption)
-                .foregroundColor(.red)
-            
-            Picker("Select size", selection: $coffeeSize) {
-                ForEach(CoffeeSize.allCases, id: \.rawValue) { size in
-                    Text(size.rawValue).tag(size)
-                }
-            }.pickerStyle(.segmented)
-            
-            Button {
-                if isValid {
-                    
-                }
-            } label: {
-                Text("Place Order")
-            }
-            .centerHorizontally()
-
+    private func placeOrder() async {
+        let order = Order(name: name,
+                          coffeeName: coffeeName,
+                          total: Double(price) ?? 0,
+                          size: coffeeSize)
+        
+        do {
+            try await coffeeModel.placeOrder(order)
+            dismiss()
+        } catch {
+            print(error)
         }
+    }
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                TextField("Name", text: $name)
+                    .accessibilityIdentifier("name")
+                    .textInputAutocapitalization(.never)
+                
+                Text(errors.name).visible(errors.name.isNotEmpty)
+                    .font(.caption)
+                    .foregroundColor(.red)
+                
+                TextField("Coffee Name", text: $coffeeName)
+                    .accessibilityIdentifier("coffeeName")
+                    .textInputAutocapitalization(.never)
+                
+                Text(errors.coffeeName).visible(errors.coffeeName.isNotEmpty)
+                    .font(.caption)
+                    .foregroundColor(.red)
+                
+                TextField("Price", text: $price)
+                    .accessibilityIdentifier("price")
+                    .textInputAutocapitalization(.never)
+                
+                Text(errors.price).visible(errors.price.isNotEmpty)
+                    .font(.caption)
+                    .foregroundColor(.red)
+                
+                Picker("Select size", selection: $coffeeSize) {
+                    ForEach(CoffeeSize.allCases, id: \.rawValue) { size in
+                        Text(size.rawValue).tag(size)
+                    }
+                }.pickerStyle(.segmented)
+                
+                Button {
+                    if isValid {
+                        Task {
+                            await placeOrder()
+                        }
+                    }
+                } label: {
+                    Text("Place Order")
+                }
+                .accessibilityIdentifier("placeOrderButton")
+                .centerHorizontally()
+
+            } //:Form
+            .navigationTitle("Add Coffee")
+        } //:NavigationStack
     }
 }
 
