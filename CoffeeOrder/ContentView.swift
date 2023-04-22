@@ -20,14 +20,31 @@ struct ContentView: View {
         }
     }
     
+    private func deleteOrder(_ indexSet: IndexSet) {
+        indexSet.forEach { index in
+            let order = coffeeModel.orders[index]
+            guard let orderId = order.id else { return }
+            
+            Task {
+                do {
+                    try await coffeeModel.deleteOrder(orderId)
+                } catch {
+                    print(error)
+                }
+            }
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             VStack {
                 if coffeeModel.orders.isEmpty {
                     Text("No orders available!").accessibilityIdentifier("noOrdersText")
                 } else {
-                    List(coffeeModel.orders) { order in
-                        OrderCellView(order: order)
+                    List {
+                        ForEach(coffeeModel.orders) { order in
+                            OrderCellView(order: order)
+                        }.onDelete(perform: deleteOrder)
                     }
                 }
             } //: VStack
