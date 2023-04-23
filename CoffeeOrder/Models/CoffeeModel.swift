@@ -31,4 +31,12 @@ class CoffeeModel: ObservableObject {
         orders.removeAll(where: { $0.id == deletedOrder.id })
     }
     
+    func updateOrder(_ order: Order) async throws {
+        let updatedOrder = try await webservice.updateOrder(order)
+        guard let index = orders.firstIndex(where: { $0.id == updatedOrder.id }) else {
+            throw CoffeeOrderError.invalidOrderId
+        }
+        orders[index] = updatedOrder
+    }
+    
 }

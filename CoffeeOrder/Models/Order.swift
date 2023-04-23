@@ -20,3 +20,7 @@ struct Order: Codable, Identifiable, Hashable {
     var total: Double
     var size: CoffeeSize
 }
+
+enum CoffeeOrderError: Error {
+    case invalidOrderId
+}
