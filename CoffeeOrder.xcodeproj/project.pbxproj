@@ -21,6 +21,7 @@
 		554C05BD29F4388300D05D98 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554C05BC29F4388300D05D98 /* View+Extensions.swift */; };
 		554C05BF29F438E500D05D98 /* AddCoffeeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554C05BE29F438E500D05D98 /* AddCoffeeView.swift */; };
 		554C05C129F4401500D05D98 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554C05C029F4401500D05D98 /* String+Extensions.swift */; };
+		55F6BF1C29F59483003F5B69 /* OrderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6BF1B29F59483003F5B69 /* OrderDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		554C05BC29F4388300D05D98 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		554C05BE29F438E500D05D98 /* AddCoffeeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCoffeeView.swift; sourceTree = "<group>"; };
 		554C05C029F4401500D05D98 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		55F6BF1B29F59483003F5B69 /* OrderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 			children = (
 				55197CBA29F1D28900E8BA1E /* OrderCellView.swift */,
 				554C05BE29F438E500D05D98 /* AddCoffeeView.swift */,
+				55F6BF1B29F59483003F5B69 /* OrderDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -266,6 +269,7 @@
 			files = (
 				554C05BF29F438E500D05D98 /* AddCoffeeView.swift in Sources */,
 				554C05C129F4401500D05D98 /* String+Extensions.swift in Sources */,
+				55F6BF1C29F59483003F5B69 /* OrderDetailView.swift in Sources */,
 				55197CB329F1B92200E8BA1E /* Order.swift in Sources */,
 				554C05BD29F4388300D05D98 /* View+Extensions.swift in Sources */,
 				55197CB829F1BA2200E8BA1E /* CoffeeModel.swift in Sources */,

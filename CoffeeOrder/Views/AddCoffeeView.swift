@@ -15,6 +15,7 @@ struct AddCoffeeErrors {
 
 struct AddCoffeeView: View {
     
+    var order: Order? = nil
     @State private var name: String = ""
     @State private var coffeeName: String = ""
     @State private var price: String = ""
@@ -46,18 +47,47 @@ struct AddCoffeeView: View {
         return errors.name.isEmpty && errors.coffeeName.isEmpty && errors.price.isEmpty
     }
     
-    private func placeOrder() async {
-        let order = Order(name: name,
-                          coffeeName: coffeeName,
-                          total: Double(price) ?? 0,
-                          size: coffeeSize)
-        
+    private func placeOrder(_ order: Order) async {
         do {
             try await coffeeModel.placeOrder(order)
             dismiss()
         } catch {
             print(error)
         }
+    }
+    
+    private func updateOrder(_ order: Order) async {
+        do {
+            try await coffeeModel.updateOrder(order)
+            dismiss()
+        } catch {
+            print(error)
+        }
+    }
+    
+    private func saveOrUpdateOrder() async {
+        if let order {
+            var editOrder = order
+            editOrder.name = name
+            editOrder.coffeeName = coffeeName
+            editOrder.total = Double(price) ?? 0
+            editOrder.size = coffeeSize
+            await updateOrder(editOrder)
+        } else {
+            let order = Order(name: name,
+                              coffeeName: coffeeName,
+                              total: Double(price) ?? 0,
+                              size: coffeeSize)
+            await placeOrder(order)
+        }
+    }
+    
+    private func populateExistingOrder() {
+        guard let order else { return }
+        name = order.name
+        coffeeName = order.coffeeName
+        price = String(order.total)
+        coffeeSize = order.size
     }
     
     var body: some View {
@@ -96,17 +126,20 @@ struct AddCoffeeView: View {
                 Button {
                     if isValid {
                         Task {
-                            await placeOrder()
+                            await saveOrUpdateOrder()
                         }
                     }
                 } label: {
-                    Text("Place Order")
+                    Text("\(order == nil ? "Place" : "Update") Order")
                 }
                 .accessibilityIdentifier("placeOrderButton")
                 .centerHorizontally()
 
             } //:Form
-            .navigationTitle("Add Coffee")
+            .navigationTitle("\(order == nil ? "Add" : "Update") Order")
+            .onAppear {
+                populateExistingOrder()
+            }
         } //:NavigationStack
     }
 }

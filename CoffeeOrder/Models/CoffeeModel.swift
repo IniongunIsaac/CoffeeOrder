@@ -39,4 +39,7 @@ class CoffeeModel: ObservableObject {
         orders[index] = updatedOrder
     }
     
+    func orderById(_ id: Int) -> Order? {
+        orders.first { $0.id == id }
+    }
 }
