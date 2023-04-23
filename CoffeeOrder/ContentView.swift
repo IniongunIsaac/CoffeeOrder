@@ -47,7 +47,7 @@ struct ContentView: View {
                                 OrderCellView(order: order)
                             }
                         }.onDelete(perform: deleteOrder)
-                    }
+                    }.accessibilityIdentifier("orderList")
                 }
             } //: VStack
             .navigationDestination(for: Int.self, destination: { orderId in
